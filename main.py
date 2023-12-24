@@ -1,4 +1,5 @@
 import random
+import threading
 import time
 
 import requests
@@ -17,21 +18,22 @@ urls = ['https://cs14.pikabu.ru/post_img/2022/08/02/3/1659407427123535691.jpg',
 
 def download(url: str):
     try:
-        # if len(url) == 0:
-        #     raise Exception('Список ссылок пуст')
-        # if not isinstance(url, list):
+        if len(urls) == 0:
+            raise Exception('Список ссылок пуст')
+        # if not isinstance(urls, list):
         #     raise TypeError('Тип передаваемых данных должен быть список')
-        # for item in url:
+        # for item in urls:
         if not isinstance(url, str):
             raise TypeError('Тип данных должен быть строка')
         response = requests.get(url)
         start = time.time()
         with open(f"{make_directory()}/{url.split('/')[-1]}", 'wb') as file:
             file.write(response.content)
-            time.sleep(random.randint(1,3))
-            print(f"Загрузка файла {url.split('/')[-1]} завершена! Время выполнения загрузки {(time.time() - start):.2f}мс")
+            # time.sleep(random.randint(1,3))
+            print(f"Загрузка файла {url.split('/')[-1]} завершена! Время выполнения загрузки {((time.time() - start)*1000):.2f}мс")
     except Exception as error:
         print(error)
+
 
 
 def make_directory(dir_name='Download') -> str:
@@ -41,5 +43,5 @@ def make_directory(dir_name='Download') -> str:
 
 
 if __name__ == '__main__':
-    # thread(download, urls)
-    multproc(download, urls)
+    thread(download, urls)
+    # multproc(download, urls)
